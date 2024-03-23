@@ -46,13 +46,11 @@ func (r Reader) Extract(output string) {
 			continue
 		}
 
-		buf := make([]byte, 1024)
-		n, err := r.r.Read(buf)
+		buf, err := io.ReadAll(r.r)
 		if err != nil {
 			log.Printf("error reading rar encoded file: %s\n", err)
 			continue
 		}
-		buf = buf[:n]
 
 		path := fmt.Sprintf("%s/%s", output, f.Name)
 		_ = os.MkdirAll(filepath.Dir(path), 0)
