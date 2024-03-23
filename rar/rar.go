@@ -48,11 +48,13 @@ func (r Reader) Extract(output string) {
 			continue
 		}
 
-		buf, err := io.ReadAll(r.r)
+		buf := make([]byte, 1024)
+		n, err := r.r.Read(buf)
 		if err != nil {
 			log.Printf("error reading rar encoded file: %s\n", err)
 			continue
 		}
+		buf = buf[:n]
 
 		if err = os.WriteFile(path, buf, 0); err != nil {
 			fmt.Printf("error decoding rar encoded file: %s\n", err)
