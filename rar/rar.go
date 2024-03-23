@@ -2,6 +2,7 @@ package rar
 
 import (
 	"fmt"
+	"github.com/nwaples/rardecode/v2"
 	"io"
 	"log"
 	"os"
