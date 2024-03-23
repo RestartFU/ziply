@@ -2,7 +2,6 @@ package rar
 
 import (
 	"fmt"
-	"github.com/nwaples/rardecode/v2"
 	"io"
 	"log"
 	"os"
@@ -39,9 +38,12 @@ func (r Reader) Extract(output string) {
 		}
 		if err != nil {
 			log.Printf("error opening rar encoded file: %s\n", err)
+			continue
 		}
+		path := fmt.Sprintf("%s/%s", output, f.Name)
 
 		if f.IsDir {
+			_ = os.MkdirAll(filepath.Dir(path), 0)
 			continue
 		}
 
@@ -51,11 +53,9 @@ func (r Reader) Extract(output string) {
 			continue
 		}
 
-		path := fmt.Sprintf("%s/%s", output, f.Name)
-		_ = os.MkdirAll(filepath.Dir(path), 0)
 		if err = os.WriteFile(path, buf, 0); err != nil {
 			fmt.Printf("error decoding rar encoded file: %s\n", err)
 		}
-		_ = r.r.Close()
 	}
+	_ = r.r.Close()
 }
